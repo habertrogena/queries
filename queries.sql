@@ -14,7 +14,7 @@ END;
 CREATE FUNCTION get_total_loan_amount()
 RETURNS DECIMAL(10, 2)
 BEGIN
-    DECLARE total_amount DECIMAL(10, 2);
+    DECLARE total_amount DECIMAL(10, 3);
     SELECT SUM(LoanAmount) INTO total_amount FROM Loans;
     RETURN total_amount;
 END;
