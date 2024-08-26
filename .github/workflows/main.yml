@@ -27,7 +27,7 @@ jobs:
 
     - name: Run SQL check and execute
       run: |
-        node check-and-execute.js
+        node execute.js
       env:
         MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
         MYSQL_USER: ${{ secrets.MYSQL_USER }}
