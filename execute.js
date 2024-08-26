@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv')
 
 // Load environment variables from .env file
 require('dotenv').config();
