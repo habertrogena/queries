@@ -1,4 +1,4 @@
--- File: queries.sql
+
 
 -- Function to get all loans
 CREATE FUNCTION get_all_loans()
