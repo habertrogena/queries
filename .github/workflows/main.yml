@@ -1,0 +1,31 @@
+# File: .github/workflows/deploy.sql.yml
+name: Deploy SQL Scripts
+
+on:
+  push:
+    branches:
+      - master  # Trigger on pushes to the master branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup MySQL
+        uses: docker://mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        with:
+          ports: 3306:3306
+
+      - name: Wait for MySQL to be ready
+        run: sleep 30
+
+      - name: Execute SQL Scripts
+        run: |
+          mysql -h 127.0.0.1 -u root -p$MYSQL_ROOT_PASSWORD < queries.sql
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
