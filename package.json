@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/habertrogena/queries/issues"
   },
-  "homepage": "https://github.com/habertrogena/queries#readme"
+  "homepage": "https://github.com/habertrogena/queries#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
