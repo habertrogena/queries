@@ -1,31 +1,43 @@
-# File: .github/workflows/deploy.sql.yml
-name: Deploy SQL Scripts
+name: SQL Query and Function Check and Execute
 
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the master branch
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  check-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Setup MySQL
-        uses: docker://mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-        with:
-          ports: 3306:3306
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
-      - name: Wait for MySQL to be ready
-        run: sleep 30
+    - name: Install dependencies
+      run: |
+        npm install
 
-      - name: Execute SQL Scripts
-        run: |
-          mysql -h 127.0.0.1 -u root -p$MYSQL_ROOT_PASSWORD < queries.sql
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+    - name: Run SQL check and execute
+      run: |
+        node check-and-execute.js
+      env:
+        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+
+    - name: Notify success
+      if: success()
+      run: echo "SQL queries and functions executed successfully!"
+
+    - name: Notify failure
+      if: failure()
+      run: echo "SQL queries and functions execution failed!"
